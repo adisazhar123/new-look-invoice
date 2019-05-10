@@ -2,7 +2,8 @@ import Vue from 'nativescript-vue'
 import App from './pages/App'
 import store from './store';
 import RadListView from 'nativescript-ui-listview/vue';
-// import FloatLabel from './components/inputs/FloatLabel';
+import FloatLabel from './components/inputs/FloatLabel';
+import FloatTextView from './components/inputs/FloatTextView';
 import Swipe from './components/SwipeActions.vue'
 
 
@@ -13,7 +14,8 @@ if(TNS_ENV !== 'production') {
   Vue.use(VueDevtools)
 }
 
-// Vue.component('FloatLabel', FloatLabel);
+Vue.component('FloatLabel', FloatLabel);
+Vue.component('FloatTextView', FloatTextView);
 Vue.use(RadListView);
 
 

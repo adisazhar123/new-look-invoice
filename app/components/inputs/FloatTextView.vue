@@ -1,8 +1,8 @@
 <template>
 	<GridLayout rows="30, auto" marginBottom="5">
 		<Label ref="label" row="1" :text="placeholder" opacity="0.4" fontSize="14" class="input" />
-		<TextField ref="textField" :secure="secure" row="1" @focus="onFocus" @blur="onBlur" borderBottomWidth="3" borderBottomColor="#cec8c8"
-		 padding="0" v-model="value" @textChange="onTextChange" />
+		<TextView ref="textView" :secure="secure" row="1" @focus="onFocus" @blur="onBlur" borderBottomWidth="3" borderBottomColor="#cec8c8"
+		 padding="0" v-model="value" @textChange="onTextChange" height="100" />
 	</GridLayout>
 </template>
 
@@ -26,7 +26,7 @@ export default {
         onFocus: function() {
             // get our elments to maninpulate.
             const label = this.$refs.label.nativeView;
-            const textField = this.$refs.textField.nativeView;
+            const textView = this.$refs.textView.nativeView;
 
             // animate the label sliding up and less transparent.
             label
@@ -37,14 +37,14 @@ export default {
                 .then(() => {}, () => {});
 
             // set the border bottom color to green to indicate focus
-            textField.borderBottomColor = new Color("#00b47e");
+            textView.borderBottomColor = new Color("#00b47e");
         },
         onBlur: function() {
             const label = this.$refs.label.nativeView;
-            const textField = this.$refs.textField.nativeView;
+            const textView = this.$refs.textView.nativeView;
 
             // if there is text in our input then don't move the label back to it's initial position.
-            if (!textField.text) {
+            if (!textView.text) {
                 label
                     .animate({
                         translate: { x: 0, y: 0 },
@@ -53,11 +53,11 @@ export default {
                     .then(() => {}, () => {});
             }
             // reset border bottom color.
-            textField.borderBottomColor = new Color("#cec8c8");
+            textView.borderBottomColor = new Color("#cec8c8");
         },
 
         onTextChange() {            
-            this.$emit('floatLabelValue', this.value);
+            this.$emit('floatTextViewValue', this.value);
         }
     }
 };

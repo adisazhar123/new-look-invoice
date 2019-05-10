@@ -40,6 +40,11 @@
     components: {
         InvoicesTab
     },
+    props: {
+        index: {
+            type: String
+        }
+    },
     data() {
       return {
         msg: 'Hello World!',       
