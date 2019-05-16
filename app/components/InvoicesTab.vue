@@ -7,15 +7,15 @@
         <TabViewItem title="UNPAID">
             <ListView for="item in unpaidInvoices" @itemTap="unpaidInvoiceTap" ref="unpaidListView">
                 <v-template height="150">     
-                    <GridLayout rows="35, auto, *" columns="160, 50, 100, *" class="invoice">
+                    <GridLayout rows="35, auto, *" columns="160, 100, 100" class="invoice">
                         <Label row="0" col="0" class="invoice-title h3" :text="item.project_name"/>
                         <Label row="1" col="0" colSpan="2" :text="item.project_description" />
                         <Label row="2" col="0" :text="item.client_name" />
 
-                        <Label row="0" col="2" :text="'Rp ' + item.total_price" />
+                        <Label row="0" col="2" :text="'Rp ' + convertToRupiah(item.total_price)" />
                         <Label row="2" col="2" text="Unpaid" class="unpaid-label" />
-                        <Label row="0" rowSpan="2" col="3" text="Edit" class="edit-label" />
-                    </GridLayout>                                
+<!--                        <Label row="0" rowSpan="2" col="3" text="Edit" class="edit-label" />-->
+                    </GridLayout>
                 </v-template>
             </ListView>                                                                                         
         </TabViewItem>
@@ -23,42 +23,42 @@
         <TabViewItem title="PAID">
            <ListView for="item in paidInvoices" ref="paidListView" @itemTap="paidInvoiceTap" >
             <v-template height="150">
-                <GridLayout rows="40, auto, *" columns="160, 50, 100, *" class="invoice">
+                <GridLayout rows="35, auto, *" columns="160, 100, 100" class="invoice">
                     <Label row="0" col="0" class="invoice-title h3" :text="item.project_name"/>
                     <Label row="1" col="0" colSpan="2" :text="item.project_description" />
                     <Label row="2" col="0" :text="item.client_name" />
 
-                    <Label row="0" col="2" :text="'Rp ' + item.total_price" />
+                    <Label row="0" col="2" :text="'Rp ' + convertToRupiah(item.total_price)" />
                     <Label row="2" col="2" text="Paid" class="paid-label" />
-                    <Label row="0" rowSpan="2" col="3" text="Edit" class="edit-label" />
-                </GridLayout>                                
+<!--                    <Label row="0" rowSpan="2" col="3" text="Edit" class="edit-label" />-->
+                </GridLayout>
             </v-template>
            </ListView>
         </TabViewItem>
 
         <TabViewItem title="ALL">
         <ListView for="item in invoices" ref="allListView">
-            <v-template height="150">     
-                <GridLayout rows="40, auto, *" columns="160, 50, 100, *" class="invoice">
+            <v-template height="150">
+                <GridLayout rows="35, auto, *" columns="160, 100, 100" class="invoice">
                     <Label row="0" col="0" class="invoice-title h3" :text="item.project_name"/>
                     <Label row="1" col="0" colSpan="2" :text="item.project_description" />
                     <Label row="2" col="0" :text="item.client_name" />
 
-                    <Label row="0" col="2" :text="'Rp ' + item.total_price" />
+                    <Label row="0" col="2" :text="'Rp ' + convertToRupiah(item.total_price)" />
                     <Label row="2" col="2" text="Paid" class="paid-label" />
-                    <Label row="0" rowSpan="2" col="3" text="Edit" class="edit-label" />
+<!--                    <Label row="0" rowSpan="2" col="3" text="Edit" class="edit-label" />-->
                 </GridLayout>                                
             </v-template>
 
-            <v-template height="150" if="item.invoice_status == 'unpaid'">     
-                <GridLayout rows="40, auto, *" columns="160, 50, 100, *" class="invoice">
+            <v-template height="150" if="item.invoice_status == 'unpaid'">
+                <GridLayout rows="35, auto, *" columns="160, 100, 100" class="invoice">
                     <Label row="0" col="0" class="invoice-title h3" :text="item.project_name"/>
                     <Label row="1" col="0" colSpan="2" :text="item.project_description" />
                     <Label row="2" col="0" :text="item.client_name" />
 
-                    <Label row="0" col="2" :text="'Rp ' + item.total_price" />
+                    <Label row="0" col="2" :text="'Rp ' + convertToRupiah(item.total_price)" />
                     <Label row="2" col="2" text="Unpaid" class="unpaid-label" />
-                    <Label row="0" rowSpan="2" col="3" text="Edit" class="edit-label" />
+<!--                    <Label row="0" rowSpan="2" col="3" text="Edit" class="edit-label" />-->
                 </GridLayout>                                
             </v-template>
         </ListView>   
@@ -71,7 +71,8 @@
 import SwipeActions from './SwipeActions.vue';
 import * as http from "http";
 import * as Toast from 'nativescript-toast';
-
+const appSettings = require("application-settings");
+const user_id = appSettings.getString("user_id");
 export default {
     components: {
         SwipeActions
@@ -100,11 +101,17 @@ export default {
     },
 
     methods: {
+        convertToRupiah(angka) {
+            var rupiah = '';		
+            var angkarev = angka.toString().split('').reverse().join('');
+            for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+            return rupiah.split('',rupiah.length-1).reverse().join('');
+        },
         getAllInvoices() {
             http.request({
-                url: 'http://10.0.2.2:1337/api/invoices',
+                url: 'http://209.97.167.184:8080/api/invoices',
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json' }                
+                headers: { 'Content-Type': 'application/json', 'user-id': user_id}                
             })
             .then(res => {
                 this.invoices = res.content.toJSON();
@@ -146,7 +153,7 @@ export default {
 
         markAsPaid(invoice) {
             http.request({
-                url: `http://10.0.2.2:1337/api/invoices/${invoice.id}/paid`,
+                url: `http://209.97.167.184:8080/api/invoices/${invoice.id}/paid`,
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' }                
             })
@@ -177,9 +184,10 @@ export default {
         },
 
         markAsUnpaid(invoice) {
-            console.log("OEE")
+            console.log("OEE");
+            console.log(invoice.id);
             http.request({
-                url: `http://10.0.2.2:1337/api/invoices/${invoice.id}/unpaid`,
+                url: `http://209.97.167.184:8080/api/invoices/${invoice.id}/unpaid`,
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' }                
             })
@@ -189,7 +197,7 @@ export default {
                 console.log(res.content.toJSON());
 
                 // remove invocie from paid array
-                this.paidInvoices.splice(this.unpaidInvoices.findIndex(function(i){
+                this.paidInvoices.splice(this.paidInvoices.findIndex(function(i){
                     return i.id === invoice.id;
                 }), 1);
 
@@ -214,7 +222,7 @@ export default {
 
         deleteInvoice(invoice) {
             http.request({
-                url: `http://10.0.2.2:1337/api/invoices/${invoice.id}`,
+                url: `http://209.97.167.184:8080/api/invoices/${invoice.id}`,
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }                
             })
@@ -247,7 +255,7 @@ export default {
 
         emailToClient(invoice) {
             http.request({
-                url: `http://10.0.2.2:1337/api/invoices/${invoice.id}/email`,
+                url: `http://209.97.167.184:8080/api/invoices/${invoice.id}/email`,
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }                
             })

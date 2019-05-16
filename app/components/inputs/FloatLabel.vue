@@ -1,7 +1,7 @@
 <template>
 	<GridLayout rows="30, auto" marginBottom="5">
 		<Label ref="label" row="1" :text="placeholder" opacity="0.4" fontSize="14" class="input" />
-		<TextField ref="textField" :secure="secure" row="1" @focus="onFocus" @blur="onBlur" borderBottomWidth="3" borderBottomColor="#cec8c8"
+		<TextField :keyboardType="keyboardType" ref="textField" :secure="secure" row="1" @focus="onFocus" @blur="onBlur" borderBottomWidth="3" borderBottomColor="#cec8c8"
 		 padding="0" v-model="value" @textChange="onTextChange" />
 	</GridLayout>
 </template>
@@ -15,13 +15,15 @@ export default {
         },
         secure: {
             type: String
-        },        
+        },
     },
     data() {
         return {
-            value: ''
+            value: '',
+			keyboardType: ''
         }
     },
+
     methods: {
         onFocus: function() {
             // get our elments to maninpulate.
@@ -56,7 +58,7 @@ export default {
             textField.borderBottomColor = new Color("#cec8c8");
         },
 
-        onTextChange() {            
+        onTextChange() {
             this.$emit('floatLabelValue', this.value);
         }
     }

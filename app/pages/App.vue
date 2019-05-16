@@ -15,17 +15,18 @@
                 :selectedIndex="selectedIndex"
                 @selectedIndexChange="indexChange">
             <TabViewItem title="My Clients">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" :text="msg" col="0" row="0"/>
-                </GridLayout>
+                <ClientsTab></ClientsTab>
+<!--                <GridLayout columns="*" rows="*">-->
+<!--                    <Label class="message" :text="msg" col="0" row="0"/>-->
+<!--                </GridLayout>-->
             </TabViewItem>
             <TabViewItem title="Invoices" >
                 <InvoicesTab></InvoicesTab>
             </TabViewItem>
             <TabViewItem title="Profile">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" text="Tab 3 Content" col="0" row="0"/>
-                </GridLayout>
+                
+                <Profile></Profile>
+
             </TabViewItem>
         </TabView>    
     </Page>
@@ -35,10 +36,14 @@
 
     import InvoicesTab from '../components/InvoicesTab.vue';
     import NewInvoice from './NewInvoice.vue';
+    import Profile from '../components/Profile.vue';
+    import ClientsTab from '../components/ClientsTab.vue';
 
-  export default {
+
+
+    export default {
     components: {
-        InvoicesTab
+        InvoicesTab, Profile, ClientsTab
     },
     props: {
         index: {
@@ -50,7 +55,8 @@
         msg: 'Hello World!',       
         page: 'clients',
         selectedIndex: 1,
-        NewInvoice
+        NewInvoice,
+  
 
       }
     },
@@ -64,7 +70,8 @@
         openInvoicePage() {
             console.log("Here");
             this.$navigateTo(NewInvoice);
-        }
+        },
+     
     }
     
   }
@@ -82,4 +89,17 @@
         font-size: 20;
         color: #333333;
     }  
+
+    .profile {
+        padding: 20;
+    }
+
+    .profile Label.bold {
+        font-weight: bold;
+        font-size: 16;
+    }
+
+    .profile StackLayout {
+        text-align: center;
+    }
 </style>

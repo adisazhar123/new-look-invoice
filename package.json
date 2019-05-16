@@ -15,8 +15,10 @@
   },
   "dependencies": {
     "@vue/devtools": "^5.0.6",
+    "@webileapps/nativescript-radiobutton": "^0.2.7",
     "nativescript-background-http": "^3.4.0",
     "nativescript-camera": "^4.4.0",
+    "nativescript-imagepicker": "^6.2.0",
     "nativescript-radiobutton": "^0.1.0",
     "nativescript-socketio": "^3.2.1",
     "nativescript-theme-core": "^1.0.4",
